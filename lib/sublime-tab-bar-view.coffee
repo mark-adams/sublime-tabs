@@ -1,4 +1,4 @@
-{$}             = require 'atom'
+{$} = require 'atom-space-pen-views'
 
 TabBarView      = require './tabs/tab-bar-view'
 SublimeTabView  = require './sublime-tab-view'

@@ -1,4 +1,4 @@
-{$} = require 'atom'
+{$} = require 'atom-space-pen-views'
 
 TreeView      = require atom.packages.resolvePackagePath('tree-view') + '/lib/tree-view'
 DirectoryView = require atom.packages.resolvePackagePath('tree-view') + '/lib/directory-view'

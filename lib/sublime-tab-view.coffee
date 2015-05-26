@@ -1,6 +1,6 @@
 _       = require 'underscore-plus'
 path    = require 'path'
-{$}     = require 'atom'
+{$} = require 'atom-space-pen-views'
 TabView = require './tabs/tab-view'
 
 module.exports =

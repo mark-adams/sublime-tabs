@@ -1,8 +1,7 @@
 BrowserWindow = null # Defer require until actually used
 RendererIpc = require('ipc')
 
-{View} = require 'atom-space-pen-views'
-{$} = require 'atom'
+{$, View} = require 'atom-space-pen-views'
 _ = require 'underscore-plus'
 TabView = require './tab-view'
 

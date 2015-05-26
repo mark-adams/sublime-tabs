@@ -1,4 +1,4 @@
-{$, View} = require 'atom'
+{$, View} = require 'atom-space-pen-views'
 _ = require 'underscore-plus'
 path = require 'path'
 
@@ -21,7 +21,7 @@ class TabView extends View
     @item.on? 'modified-status-changed', =>
       @updateModifiedStatus()
 
-    @subscribe atom.config.observe 'tabs.showIcons', => @updateIconVisibility()
+    atom.config.observe 'tabs.showIcons', => @updateIconVisibility()
 
     @updateTitle()
     @updateIcon()
@@ -30,17 +30,19 @@ class TabView extends View
     @updateDataAttributes()
 
   updateTooltip: ->
-    @destroyTooltip()
+    if @tooltip?
+      @tooltip.dispose()
+      @tooltip = null
 
     if itemPath = @item.getPath?()
-      @setTooltip
+      @tooltip = atom.tooltips.add @,
         title: _.escape(itemPath)
         delay:
           show: 2000
           hide: 100
         placement: 'bottom'
 
-  beforeRemove: ->
+  detached: ->
     @destroyTooltip()
 
   updateTitle: ->

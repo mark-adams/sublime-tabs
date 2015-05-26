@@ -156,7 +156,7 @@ describe 'SublimeTabBarView', ->
             pane.activateItem(editor2)
 
         runs ->
-          atom.workspaceView.trigger 'core:save'
+          $(atom.workspaceView).trigger 'core:save'
           expect(tabBar.tabForItem(editor2)).not.toHaveClass 'temp'
 
 
