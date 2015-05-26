@@ -1,4 +1,6 @@
-{$, WorkspaceView, View}  = require 'atom'
+{WorkspaceView}  = require 'atom'
+{$, View} = require 'atom-space-pen-views'
+
 _                         = require 'underscore-plus'
 path                      = require 'path'
 SublimeTabBarView         = require '../lib/sublime-tab-bar-view'
@@ -106,7 +108,7 @@ describe 'SublimeTabBarView', ->
 
           runs ->
             pane.activateItem(editor2)
-            tabBar.tabForItem(editor2).trigger 'dblclick'
+            $(tabBar.tabForItem(editor2)).dblclick()
             expect(tabBar.tabForItem(editor2)).not.toHaveClass 'temp'
 
       describe 'when opening views that do not contain an editor', ->

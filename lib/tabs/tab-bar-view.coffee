@@ -1,7 +1,8 @@
 BrowserWindow = null # Defer require until actually used
 RendererIpc = require('ipc')
 
-{$, View} = require 'atom'
+{View} = require 'atom-space-pen-views'
+{$} = require 'atom'
 _ = require 'underscore-plus'
 TabView = require './tab-view'
 
@@ -11,11 +12,11 @@ class TabBarView extends View
     @ul tabindex: -1, class: "list-inline tab-bar inset-panel"
 
   initialize: (@pane) ->
-    @command 'tabs:close-tab', => @closeTab()
-    @command 'tabs:close-other-tabs', => @closeOtherTabs()
-    @command 'tabs:close-tabs-to-right', => @closeTabsToRight()
-    @command 'tabs:close-saved-tabs', => @closeSavedTabs()
-    @command 'tabs:close-all-tabs', => @closeAllTabs()
+    atom.commands.add 'atom-workspace', 'tabs:close-tab', => @closeTab()
+    atom.commands.add 'atom-workspace', 'tabs:close-other-tabs', => @closeOtherTabs()
+    atom.commands.add 'atom-workspace', 'tabs:close-tabs-to-right', => @closeTabsToRight()
+    atom.commands.add 'atom-workspace', 'tabs:close-saved-tabs', => @closeSavedTabs()
+    atom.commands.add 'atom-workspace', 'tabs:close-all-tabs', => @closeAllTabs()
 
     @on 'dragstart', '.sortable', @onDragStart
     @on 'dragend', '.sortable', @onDragEnd
@@ -26,24 +27,25 @@ class TabBarView extends View
     @paneContainer = @pane.getContainer()
     @addTabForItem(item) for item in @pane.getItems()
 
-    @subscribe @paneContainer, 'pane:removed', (e, pane) =>
+    @paneContainer.on 'pane:removed', (e, pane) =>
       @unsubscribe() if pane is @pane
 
-    @subscribe @pane, 'pane:item-added', (e, item, index) =>
-      @addTabForItem(item, index)
-      true
+    @paneContainer.on 'pane:item-added', (e, item, index) =>
+        @addTabForItem(item, index)
+        true
 
-    @subscribe @pane, 'pane:item-moved', (e, item, index) =>
-      @moveItemTabToIndex(item, index)
-      true
+    @pane.on 'pane:item-moved', (e, item, index) =>
+        @moveItemTabToIndex(item, index)
+        true
 
-    @subscribe @pane, 'pane:item-removed', (e, item) =>
-      @removeTabForItem(item)
-      true
+    @pane.on 'pane:item-removed', (e, item) =>
+        @removeTabForItem(item)
+        true
 
-    @subscribe @pane, 'pane:active-item-changed', =>
-      @updateActiveTab()
-      true
+    @pane.on 'pane:active-item-changed', =>
+        @updateActiveTab()
+        true
+
 
     @updateActiveTab()
 
@@ -80,7 +82,6 @@ class TabBarView extends View
 
   unsubscribe: ->
     RendererIpc.removeListener('tab:dropped', @onDropOnOtherWindow)
-    super
 
   addTabForItem: (item, index) ->
     @insertTabAtIndex(new TabView(item, @pane), index)
